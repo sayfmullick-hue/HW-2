@@ -29,7 +29,7 @@ int main () {
 // tests the static conversion of components into total seconds
 void TestComponentsToSeconds(){
 	std::cout << "\nTesting ComponentsToSeconds\n" << std::endl;
-	long long unsigned int t = TimeCode::ComponentsToSeconds(3, 17, 42);
+	unsigned long long int t = TimeCode::ComponentsToSeconds(3, 17, 42);
 	assert(t == 11862);
 	std::cout << "PASSED!" << std::endl;
 }

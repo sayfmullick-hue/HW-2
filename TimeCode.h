@@ -7,7 +7,7 @@ using namespace std;
 
 class TimeCode {
     public:
-        TimeCode(unsigned int hr = 0, unsigned int min = 0, long long unsigned int sec = 0);
+        TimeCode(unsigned int hr = 0, unsigned int min = 0, unsigned long long int sec = 0);
         TimeCode(const TimeCode& tc);
         ~TimeCode(){};
 
@@ -21,9 +21,9 @@ class TimeCode {
         unsigned int GetMinutes() const;
         unsigned int GetSeconds() const;
 
-        long long unsigned int GetTimeCodeAsSeconds() const { return t; };
+        unsigned long long int GetTimeCodeAsSeconds() const { return t; };
         void GetComponents(unsigned int& hr, unsigned int& min, unsigned int& sec) const;
-        static long long unsigned int ComponentsToSeconds(unsigned int hr, unsigned int min, unsigned long long int sec);
+        static unsigned long long int ComponentsToSeconds(unsigned int hr, unsigned int min, unsigned long long int sec);
 
         string ToString() const;
 
@@ -42,7 +42,7 @@ class TimeCode {
         bool operator >= (const TimeCode& other) const;
 
     private:
-        long long unsigned int t = 0;
+        unsigned long long int t = 0;
 };
 
 #endif

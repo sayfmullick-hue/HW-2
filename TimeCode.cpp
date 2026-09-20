@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include "TimeCode.h"
 
-TimeCode::TimeCode(unsigned int hr, unsigned int min, long long unsigned int sec) {
+TimeCode::TimeCode(unsigned int hr, unsigned int min, unsigned long long int sec) {
 	t = ComponentsToSeconds(hr, min, sec);
 }
 
@@ -12,7 +12,7 @@ TimeCode::TimeCode(const TimeCode& tc) {
 }
 
 // takes the components and calculates total seconds using static casting to prevent overflow
-long long unsigned int TimeCode::ComponentsToSeconds(unsigned int hr, unsigned int min, unsigned long long int sec) {
+unsigned long long int TimeCode::ComponentsToSeconds(unsigned int hr, unsigned int min, unsigned long long int sec) {
 	return (static_cast<unsigned long long int>(hr) * 3600) + 
 	       (static_cast<unsigned long long int>(min) * 60) + 
 	       sec;
@@ -104,7 +104,7 @@ TimeCode TimeCode::operator*(double a) const {
 		throw std::invalid_argument("Negative arguments not allowed: " + std::to_string(a));
 	}
 	TimeCode result;
-	result.t = static_cast<long long unsigned int>(this->t * a);
+	result.t = static_cast<unsigned long long int>(this->t * a);
 	return result;
 }
 
@@ -116,7 +116,7 @@ TimeCode TimeCode::operator/(double a) const {
 		throw std::invalid_argument("Negative arguments not allowed: " + std::to_string(a));
 	} else {
 		TimeCode result;
-		result.t = static_cast<long long unsigned int>(this->t / a);
+		result.t = static_cast<unsigned long long int>(this->t / a);
 		return result;
 	}
 }
