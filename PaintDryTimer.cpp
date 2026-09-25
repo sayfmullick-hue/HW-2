@@ -42,7 +42,6 @@ long long int get_time_remaining(DryingSnapShot dss){
 
 
 string drying_snap_shot_to_string(DryingSnapShot dss){
-	// Replace with your code
 	long long int remain = get_time_remaining(dss);
 	
 	TimeCode remain_tc(0, 0, remain);
@@ -53,14 +52,14 @@ string drying_snap_shot_to_string(DryingSnapShot dss){
 
 
 double get_sphere_sa(double rad){
-	// replace with your code
-	return 0;
+	
+	return 4.0 * M_PI * rad * rad;
 }
 
 
 TimeCode *compute_time_code(double surfaceArea){
 	// replace with your code
-	return nullptr;
+	return new TimeCode(0, 0, static_cast<unsigned long long int>(surfaceArea));
 }
 
 
