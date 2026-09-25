@@ -40,7 +40,7 @@ long long int get_time_remaining(DryingSnapShot dss){
 	return remain;
 }
 
-
+// Returns a string telling the user how much time is left of the total time it will take the paint to dry
 string drying_snap_shot_to_string(DryingSnapShot dss){
 	long long int remain = get_time_remaining(dss);
 	
@@ -125,7 +125,69 @@ void tests(){
 
 
 int main(){
-	// replace with your code
-	tests();
+	//tests();
+	vector<DryingSnapShot> batches;
+    string input;
+    unsigned int batch_counter = 1;
+
+    cout << "Welcome to the Paint Dry Timer!" << endl;
+
+    while (true) {
+        cout << "\nChoose an option: (A)dd, (V)iew, (Q)uit: ";
+        cin >> input;
+
+        if (input == "A" || input == "a") {
+            double radius;
+            cout << "Enter radius: ";
+            cin >> radius;
+
+            DryingSnapShot new_batch;
+            new_batch.startTime = time(0);
+            new_batch.name = "Batch-" + to_string(batch_counter);
+            batch_counter++;
+
+            double sa = get_sphere_sa(radius);
+            new_batch.timeToDry = compute_time_code(sa);
+
+            batches.push_back(new_batch);
+            
+            cout << new_batch.name << " added! It will take " << new_batch.timeToDry->ToString() << " to dry." << endl;
+        } 
+        else if (input == "V" || input == "v") {
+            if (batches.empty()) {
+                cout << "No batches are currently being tracked." << endl;
+                continue;
+            }
+
+            // Create a temporary vector to keep only batches that are still drying
+            vector<DryingSnapShot> active_batches;
+
+            for (size_t i = 0; i < batches.size(); i++) {
+                cout << drying_snap_shot_to_string(batches[i]) << endl;
+
+                if (get_time_remaining(batches[i]) > 0) {
+                    active_batches.push_back(batches[i]);
+                } else {
+                    // Free's the heap memory for objects that are finished
+                    delete batches[i].timeToDry;
+                }
+            }
+            
+            // Overwrite the old vector with only the active ones
+            batches = active_batches;
+        }
+        else if (input == "Q" || input == "q") {
+            cout << "Exiting program. Cleaning up memory..." << endl;
+            break;
+        }
+        else {
+            cout << "Invalid option." << endl;
+        }
+    }
+
+    // Ensure there are no memory leaks when quitting
+    for (size_t i = 0; i < batches.size(); i++) {
+        delete batches[i].timeToDry;
+    }
 	return 0;
 }
