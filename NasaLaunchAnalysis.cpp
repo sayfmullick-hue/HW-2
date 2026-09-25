@@ -9,7 +9,7 @@ using namespace std;
 
 TimeCode parse_time(const string& line){
 	
-		
+	// Creates a stringstream object of the line so that you can use getline on it to split it by the ':'	
 	stringstream ss(line);
 	string before, after;
 	
@@ -29,12 +29,15 @@ TimeCode parse_time(const string& line){
 
 int main(){
 	ifstream file("Space_Corrected.csv");
+	// uses a vector of TimeCode objects to store the the different times to be summed and averaged later
 	vector<TimeCode> time_container;
 	string line;
 	
+	// call getline once to initially skip the header line
 	getline(file, line);
 	
 	while (getline(file, line)) {
+		// uses string::npos to see if there is a ':' detected, if there isnt it goes to the next line
 		if (line.find(':') != string::npos){
 			time_container.emplace_back(parse_time(line));
 		}
