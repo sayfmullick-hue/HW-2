@@ -28,12 +28,12 @@ struct DryingSnapShot {
 long long int get_time_remaining(DryingSnapShot dss){
 	// Replace with your code
 	time_t cur_time = time(0);
-	long long int elapsed = static_cast<long long int>(current_time - dss.startTime);
-	long long int total_seconds = statoc_cast<long long int>(dss.timeToDry->GetTimeCodeAsSeconds());
+	long long int elapsed = static_cast<long long int>(cur_time - dss.startTime);
+	long long int total_seconds = static_cast<long long int>(dss.timeToDry->GetTimeCodeAsSeconds());
 	
 	long long int remain = total_seconds - elapsed;
 	
-	if (remaining < 0) {
+	if (remain < 0) {
 		return 0;
 	}
 	
@@ -46,7 +46,7 @@ string drying_snap_shot_to_string(DryingSnapShot dss){
 	
 	TimeCode remain_tc(0, 0, remain);
 	
-	return dss.name + " (Total time it will take: " + dss.timeToDry->ToString() + ")\nTime Remaining: " + remain_tc.ToString();
+	return dss.name + " will take in total " + dss.timeToDry->ToString() + "\nTime Remaining: " + remain_tc.ToString();
 	
 }
 
@@ -72,14 +72,24 @@ void tests(){
 	long long int ans = get_time_remaining(dss);
 	assert(ans > 6 && ans < 8);
 	// add more tests here
-
+	DryingSnapShot dss_done;
+    dss_done.startTime = time(0) - 20; // Started 20 seconds ago
+    TimeCode tc_done = TimeCode(0, 0, 5); // Only takes 5 seconds to dry
+    dss_done.timeToDry = &tc_done;
+    assert(get_time_remaining(dss_done) == 0);
 
 	// get_sphere_sa
 	double sa = get_sphere_sa(2.0);
 	assert (50.2654 < sa && sa < 50.2655);
-	// add more tests here
-
-
+	
+	// Check radius of 0 results in 0
+	double sa_zero = get_sphere_sa(0.0);
+    assert (sa_zero == 0.0);
+	
+	// Check radius of 1 results in 4 * pi
+	double sa_one = get_sphere_sa(1.0);
+    assert (12.5663 < sa_one && sa_one < 12.5664);
+    
 	// compute_time_code
 	TimeCode *tc2 = compute_time_code(1.0);
 	//cout << "tc: " << tc.GetTimeCodeAsSeconds() << endl;
@@ -88,7 +98,26 @@ void tests(){
 
 
 	// add more tests here
-
+	// Large surface area forcing TimeCode to roll over into hours and minutes
+    TimeCode *tc3 = compute_time_code(3665.9); // 3665 total seconds
+    assert(tc3->GetTimeCodeAsSeconds() == 3665);
+    assert(tc3->GetHours() == 1);
+    assert(tc3->GetMinutes() == 1);
+    assert(tc3->GetSeconds() == 5);
+    delete tc3;
+    
+    
+    // Verify string formatting contains the expected components
+    DryingSnapShot dss_str;
+    dss_str.name = "Batch-X";
+    dss_str.startTime = time(0);
+    TimeCode tc_str = TimeCode(1, 30, 0); 
+    dss_str.timeToDry = &tc_str;
+    
+    string output = drying_snap_shot_to_string(dss_str);
+    cout << "\n" << output << "\n";
+    assert(output.find("Batch-X") != string::npos);
+    assert(output.find("will take in total 1:30:0") != string::npos);
 
 	cout << "ALL TESTS PASSED!" << endl;
 
@@ -97,6 +126,6 @@ void tests(){
 
 int main(){
 	// replace with your code
-	//tests());
+	tests();
 	return 0;
 }
