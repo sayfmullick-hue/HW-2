@@ -43,7 +43,12 @@ long long int get_time_remaining(DryingSnapShot dss){
 
 string drying_snap_shot_to_string(DryingSnapShot dss){
 	// Replace with your code
-	return "";
+	long long int remain = get_time_remaining(dss);
+	
+	TimeCode remain_tc(0, 0, remain);
+	
+	return dss.name + " (Total time it will take: " + dss.timeToDry->ToString() + ")\nTime Remaining: " + remain_tc.ToString();
+	
 }
 
 
